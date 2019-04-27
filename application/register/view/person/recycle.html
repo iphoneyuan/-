@@ -1,0 +1,134 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+
+
+{/block}
+
+{block name="content"}
+<div class="nowrap" style="margin-bottom:10px"  >
+    <button onclick='delall()' class='layui-btn layui-btn-small' style="background-color:#FF5722;">批量删除</button>
+    <button style="background-color:#4c8ced;" onclick='delhuanall()' class='layui-btn layui-btn-small'>批量还原</button>
+</div>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th class='list-table-check-td'>
+        </th>
+        <th class="text-center">姓名</th>
+        <th class="text-center">头像</th>
+        <th class="text-center">昵称</th>
+        <th class="text-center">性别</th>
+        <th class="text-center">工号</th>
+        <th class="text-center">所在系部</th>
+        <th class="text-center">操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class='list-table-sort-td'>
+            <input name="id" type="checkbox" class="list-sort-input" value="{$vo.id}"/>
+        </td >
+        <td class="text-center">{$vo.name}</td>
+        <td class="text-center">
+            {if condition="($vo.imageurl=='')"}<p style="color: red">尚未设置</p>
+            {else /}
+            <img data-tips-image style="width: 3rem;height: 3rem" src="https://fengyuan.site/hkr/static{$vo.imageurl}" alt="" />
+            {/if}
+        </td>
+        <td class="text-center">
+            {if condition="($vo.nickname=='')"}<p style="color: red">尚未设置</p>
+            {else /} {$vo.nickname}
+            {/if}
+        </td>
+        <td class="text-center">
+            {if condition="$vo.sex"}男
+            {else /} 女
+            {/if}
+        </td>
+        <td class="text-center">{$vo.number}</td>
+        <td class="text-center">{$vo.department}</td>
+
+        <td class="text-center" style="width: 200px" nowrap>
+            <a  data-action="{:url('revice')}" href="javascript:void(0)" data-update="{$vo['id']}">还原</a>
+            <span class="text-explode">|</span>
+            <a style="color:#FF5722;" data-action="{:url('del')}" href="javascript:void(0)" data-update="{$vo['id']}">删除</a>
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+    {if isset($page)}<p>{$page}</p>{/if}
+</table>
+{/block}
+
+{block name="script"}
+{if auth("$classuri/tagset")}
+<script>
+    function delall(){
+        var id =$("input:checkbox[name='id']:checked").map(function(index,elem) {
+            return $(elem).val();
+        }).get().join(',');
+        if(id==""){
+            layer.alert('您尚未勾选信息', {icon: 2});
+        }else {
+            layer.confirm('是否确定删除？', {
+                btn: ['确定', '取消'],
+            }, function (index) {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    data: {"id": id},
+                    url: "{:url('delall')}",
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.close(index);
+                        if (res.error_code == 1) {
+                            layer.alert('删除个人信息成功', {icon: 1});
+                            setTimeout(function () {
+                                location.reload();
+                            },2000);
+                        } else {
+                            layer.alert('删除个人信息失敗', {icon: 2});
+                        }
+                    }
+                })
+            });
+        }
+    }
+
+    function delhuanall() {
+        var id =$("input:checkbox[name='id']:checked").map(function(index,elem) {
+            return $(elem).val();
+        }).get().join(',');
+        if(id==""){
+            layer.alert('您尚未勾选信息', {icon: 2});
+        }else {
+            layer.confirm('是否确定还原？', {
+                btn: ['确定', '取消'],
+            }, function (index) {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    data: {"id": id},
+                    url: "{:url('delhuanall')}",
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.close(index);
+                        if (res.error_code == 1) {
+                            layer.alert('还原个人信息成功', {icon: 1});
+                            setTimeout(function () {
+                                location.reload();
+                            },2000);
+                        } else {
+                            layer.alert('还原个人信息失敗', {icon: 2});
+                        }
+                    }
+                })
+            });
+        }
+    }
+</script>
+{/if}
+{/block}

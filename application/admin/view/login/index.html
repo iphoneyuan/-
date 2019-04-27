@@ -1,0 +1,238 @@
+{extend name="extra@admin/main"}
+
+{block name="style"}
+<link rel="stylesheet" href="__STATIC__/theme/default/css/login.css">
+<style>
+    #code span{
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+</style>
+{/block}
+
+{block name="body"}
+<div class="login-container full-height">
+
+
+    <!-- 页面表单主体 开始 -->
+    <div id="divbackground" style="position: fixed;top: 0;left: 0;width: 100vw;height: 100vh;pointer-events: none;"></div>
+    <div class="container" style="top:50%;margin-top:-300px">
+        <form onsubmit="return false;" data-time="0.001" data-auto="true" method="post"
+              class="content layui-form animated fadeInDown">
+            <div class="people">
+                <div class="tou"></div>
+                <div id="left-hander" class="initial_left_hand transition"></div>
+                <div id="right-hander" class="initial_right_hand transition"></div>
+            </div>
+            <ul>
+                <li>
+                    <input name='username' class="hide"/>
+                    <input required="required" pattern="^\S{4,}$"  name="username"
+                           autofocus="autofocus" autocomplete="off" class="login-input username" style="margin-bottom: -15px;"
+                           title="请输入4位及以上的字符" placeholder="请输入用户名/手机号码"/>
+                </li>
+                <li>
+                    <input name='password' class="hide"/>
+                    <input required="required" pattern="^\S{4,}$"  name="password"
+                           type="password" autocomplete="off" class="login-input password" style="margin-bottom: -15px;"
+                           title="请输入4位及以上的字符" placeholder="请输入密码"/>
+                </li>
+                <li style="display: flex;margin-bottom: 0;">
+                    <input name='identifying_code' class="hide"/>
+                    <div id="code" style="position: relative;width: calc(100% - 120px);flex:1;">
+                        <input  name="identifying_code"
+                               type="autofocus" autocomplete="off" class="login-input password"
+                               title="请输入验证码" placeholder="请输入验证码" />
+                    </div>
+
+                    <div style="height: 38px;"><img src="{:captcha_src()}" alt="captcha" onclick="this.src='{:captcha_src()}?'+Math.random()" style="height: 38px;display: block;"/></div>
+                </li>
+                <li class="text-center">
+                    <button style="background-color:#4c8ced;" type="submit" class="layui-btn layui-disabled" data-form-loaded="立 即 登 录">正 在 载 入</button>
+                    <!--<a style="position:absolute;display:block;right:0" href="javascript:void(0)">忘记密码？</a>-->
+                </li>
+            </ul>
+        </form>
+    </div>
+    <!-- 页面表单主体 结束 -->
+
+    <!-- 底部版权信息 开始 -->
+    {if sysconf('site_copy')}
+    <div class="footer notselect">{:sysconf('site_copy')}</div>
+    {/if}
+    <!-- 底部版本信息 结束 -->
+
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    if (window.location.href.indexOf('#') > -1) {
+        window.location.href = window.location.href.split('#')[0];
+    }
+    require(['jquery'], function ($) {
+        $('[name="password"]').on('focus', function () {
+            $('#left-hander').removeClass('initial_left_hand').addClass('left_hand');
+            $('#right-hander').removeClass('initial_right_hand').addClass('right_hand')
+        }).on('blur', function () {
+            $('#left-hander').addClass('initial_left_hand').removeClass('left_hand');
+            $('#right-hander').addClass('initial_right_hand').removeClass('right_hand')
+        });
+    });
+</script>
+<script type="text/javascript">
+    var SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
+
+    var container;
+    var camera, scene, renderer;
+
+    var particles, particle, count = 0;
+
+    var mouseX = 0, mouseY = 0;
+
+    var windowHalfX = window.innerWidth / 2;
+    var windowHalfY = window.innerHeight / 2;
+
+    init();
+    animate();
+
+    function init() {
+        container = document.getElementById( 'divbackground' );
+        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+        camera.position.z = 1000;
+
+        scene = new THREE.Scene();
+
+        particles = new Array();
+
+        var PI2 = Math.PI * 2;
+        var material = new THREE.ParticleCanvasMaterial( {
+
+            color: 0xffffff,
+            program: function ( context ) {
+
+                context.beginPath();
+                context.arc( 0, 0, 1, 0, PI2, true );
+                context.fill();
+
+            }
+
+        } );
+
+        var i = 0;
+
+        for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+
+            for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
+
+                particle = particles[ i ++ ] = new THREE.Particle( material );
+                particle.position.x = ix * SEPARATION - ( ( AMOUNTX * SEPARATION ) / 2 );
+                particle.position.z = iy * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 );
+                scene.add( particle );
+
+            }
+
+        }
+
+        renderer = new THREE.CanvasRenderer();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        container.appendChild( renderer.domElement );
+
+        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+        document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+        //
+
+        window.addEventListener( 'resize', onWindowResize, false );
+
+    }
+
+    function onWindowResize() {
+
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
+
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize( window.innerWidth, window.innerHeight );
+
+    }
+
+    //
+
+    function onDocumentMouseMove( event ) {
+
+        mouseX = event.clientX - windowHalfX;
+        mouseY = event.clientY - windowHalfY;
+
+    }
+
+    function onDocumentTouchStart( event ) {
+
+        if ( event.touches.length === 1 ) {
+
+            event.preventDefault();
+
+            mouseX = event.touches[ 0 ].pageX - windowHalfX;
+            mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+        }
+
+    }
+
+    function onDocumentTouchMove( event ) {
+
+        if ( event.touches.length === 1 ) {
+
+            event.preventDefault();
+
+            mouseX = event.touches[ 0 ].pageX - windowHalfX;
+            mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+        }
+
+    }
+
+    //
+
+    function animate() {
+
+        requestAnimationFrame( animate );
+
+        render();
+
+
+    }
+
+    function render() {
+
+        camera.position.x += ( mouseX - camera.position.x ) * .05;
+        camera.position.y += ( - mouseY - camera.position.y ) * .05;
+        camera.lookAt( scene.position );
+
+        var i = 0;
+
+        for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
+
+            for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
+
+                particle = particles[ i++ ];
+                particle.position.y = ( Math.sin( ( ix + count ) * 0.3 ) * 50 ) + ( Math.sin( ( iy + count ) * 0.5 ) * 50 );
+                particle.scale.x = particle.scale.y = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 2 + ( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 2;
+
+            }
+
+        }
+
+        renderer.render( scene, camera );
+
+        count += 0.1;
+
+    }
+</script>
+
+
+{/block}

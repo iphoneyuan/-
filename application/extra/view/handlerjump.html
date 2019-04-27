@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>跳转提示</title>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<div  style="display: none">
+    <p class="code"><?php echo($code); ?></p>
+    <p class="word"><?php echo(strip_tags($msg));?></p>
+    <p class="jump">
+        页面自动 <a id="href" href="<?php echo($url);?>">跳转</a> 等待时间： <b id="wait"><?php echo($wait);?></b>
+    </p>
+</div>
+<script src="__STATIC__/plugs/jquery/jquery.min.js"></script>
+<script src="__STATIC__/plugs/layer/layer.js"></script>
+<script type="text/javascript">
+    (function () {
+        var code=$('.code').html();
+        var msg = $('.word').html();
+        var href = document.getElementById('href').href;
+        layer.msg(msg,{
+            icon: code,
+            time: 2000,
+            offset:[400,750]
+        },function () {
+            location.href = "javascript:history.back(-1)";
+        });
+
+    })();
+</script>
+</body>
+</html>

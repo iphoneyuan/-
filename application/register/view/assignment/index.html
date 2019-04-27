@@ -1,0 +1,158 @@
+{extend name='extra@admin/content'}
+
+
+{block name="button"}
+
+{/block}
+
+
+
+{block name="content"}
+<div class="nowrap pull-right" style="margin-top:5px;margin-bottom: 10px">
+    <button type="button" class="layui-btn" id="test1" data-modal="{:url('showinput')}" style="background-color:#4c8ced;"><i class="layui-icon">&#xe67c;</i>导入/更新成绩表</button> &nbsp;&nbsp;&nbsp;
+    <a href="{:url('Assignment/output')}" class='layui-btn layui-btn-small' style="text-decoration: none;color: white;background-color:#4c8ced;">导出考试表</a>
+    <a data-load="{:url('Assignment/RuanDelAll')}" data-confirm="请慎重清空，数据不可恢复" class='layui-btn layui-btn-small layui-btn-danger' style="text-decoration: none;color: white">清空考试任务</a>
+</div>
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+    <div class="col-xs-3">
+        <div class="form-group">
+            <input type="text" name="coursename" value="{$Think.get.search|default=''}" placeholder="{:lang('科目名称')}" class="input-sm form-control input-sear">
+        </div>
+    </div>
+    <div class="col-xs-3">
+        <div class="form-group">
+            <input type="text" name="teachername" value="{$Think.get.search|default=''}" placeholder="{:lang('姓名')}" class="input-sm form-control input-sear">
+        </div>
+    </div>
+    <input type="hidden" name="page" value="0" >
+    <div class="col-xs-1">
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-white ico-search"><i class="fa fa-search"></i> {:lang('搜索')}</button>
+        </div>
+    </div>
+</form>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th class='list-table-check-td'>
+            <input name="" type="checkbox" class="list-sort-input"/>
+        </th>
+        <th class="text-center">科目名称</th>
+        <th class="text-center">科目编号</th>
+        <th class="text-center">考场</th>
+        <th class="text-center">主考老师</th>
+        <th class="text-center">副考老师</th>
+        <th class="text-center">巡考老师</th>
+        <th class="text-center">监考老师</th>
+        <th class="text-center">教学周</th>
+        <th class="text-center">星期</th>
+        <th class="text-center">考试开始时间</th>
+        <th class="text-center">考试结束时间</th>
+        <th class="text-center">操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class='list-table-sort-td'>
+            <input name="id" type="checkbox" value="{$vo.id}" class="list-sort-input"/>
+        </td >
+        <td class="text-center">{$vo.name}</td>
+        <td class="text-center">{$vo.courseId}</td>
+        <td class="text-center">{$vo.door_number}</td>
+        <td class="text-center">{$vo.main_teacher}</td>
+        <td class="text-center">{$vo.second_teacher}</td>
+        <td class="text-center">{$vo.walk_teacher_one}&nbsp{$vo.walk_teacher_two}</td>
+        <td class="text-center">{$vo.watch_teacher_one}&nbsp{$vo.watch_teacher_second}&nbsp{$vo.watch_teacher_third}&nbsp{$vo.watch_teacher_four}</td>
+        <td class="text-center">{$vo.week}</td>
+        <td class="text-center">{$vo.day}</td>
+        <td class="text-center">{$vo.begindate}</td>
+        <td class="text-center">{$vo.enddate}</td>
+        <td class="text-center" style="width: 120px" nowrap>
+            <a  data-modal="{:url('edit',['id'=>$vo['id']])}" href="javascript:void(0)" >修改</a>
+            <span class="text-explode">|</span>
+            <a style="color:#FF5722;"  data-action="{:url('ruandel')}" href="javascript:void(0)" data-update="{$vo['id']}">删除</a>
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+
+</table>
+{if isset($page)}<p>{$page}</p>{/if}
+<div class="nowrap">
+    <span style="background-color: #FF5722" onclick='delruanquestionall()' class='layui-btn layui-btn-small'>批量删除</span>
+</div>
+
+{/block}
+
+{block name="script"}
+<style>
+    .form-group button{
+        height: 30px;
+        box-sizing: border-box;
+    }
+    .form-group button:hover{
+        color: #fff!important;
+        background: #4c8ced!important;
+    }
+    .input-sm:focus::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        opacity: 0;
+        transition: all .3s;
+    }
+    .input-sm:focus:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .input-sm:focus::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .input-sm:focus:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        transition: all .3s;
+        opacity: 0;
+    }
+</style>
+
+<script type="text/javascript">
+
+    function delruanquestionall() {
+        var id =$("input:checkbox[name='id']:checked").map(function(index,elem) {
+            return $(elem).val();
+        }).get().join(',');
+        if(id==""){
+            layer.alert('您尚未勾选信息', {icon: 2});
+        }else {
+            layer.confirm('是否确定删除？', {
+                btn: ['确定', '取消'],
+            }, function (index) {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    data: {"id": id},
+                    url: "{:url('delruanquestionall')}",
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.close(index);
+                        if (res.error_code == 1) {
+                            layer.alert('删除任務信息成功', {icon: 1});
+                            setTimeout(function () {
+                                location.reload();
+                            },2000);
+                        } else {
+                            layer.alert('删除任務信息失敗', {icon: 2});
+                        }
+                    }
+                })
+            });
+        }
+    }
+    
+</script>
+
+
+{/block}

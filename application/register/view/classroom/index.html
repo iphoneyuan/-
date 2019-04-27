@@ -1,0 +1,61 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <button data-open="{:url('add')}" class='layui-btn layui-btn-small'>投诉详情</button>
+    <!--<button data-update data-field='delete' data-action='{:url("$classuri/del")}'-->
+    <!--class='layui-btn layui-btn-small layui-btn-danger'>删除规则-->
+    <!--</button>-->
+</div>
+{/block}
+
+{block name='content'}
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th class='list-table-check-td'>
+            <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+        </th>
+        <th class="text-center">课室代码</th>
+        <th class="text-center">课室名称</th>
+        <th class="text-center">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class='list-table-sort-td'>
+            <input name="{$vo.id}" type="checkbox" class="list-sort-input"/>
+        </td>
+        <td class='text-center'>
+            {$vo.door_number}
+        </td>
+        <td class='text-center'>
+            {$vo.door_number}
+        </td>
+        <!--<td class="text-center">-->
+            <!--{if condition="$vo.name==''"}-->
+            <!--<p style="color: red">未设置</p>-->
+            <!--{else /}-->
+            <!--{$vo.name}-->
+            <!--{/if}-->
+        <!--</td>-->
+        <td class='text-center' style="width: 100px" >
+            <a style="color:#FF5722;" data-action="{:url('Classroom/del')}"  href="javascript:void(0)" data-update="{$vo['id']}">删除</a>
+        </td>
+
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+
+</form>
+{if isset($page)}<p>{$page}</p>{/if}
+{/block}
+
+{block name="script"}
+<script>
+
+</script>
+{/block}

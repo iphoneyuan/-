@@ -1,0 +1,107 @@
+{extend name='extra@admin/content'}
+
+
+{block name="button"}
+
+{/block}
+
+
+
+{block name="content"}
+<div class="nowrap pull-right" style="margin-top:5px;margin-bottom: 10px">
+    <a href="{:url('clock/output')}" class='layui-btn layui-btn-small'  style="background-color:#4c8ced;text-decoration: none;color: white">导出未签到表</a>
+</div>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th class="text-center">科目名称</th>
+        <th class="text-center">科目编号</th>
+        <th class="text-center">课室</th>
+        <th class="text-center">监考老师1</th>
+        <th class="text-center">签到情况</th>
+        <th class="text-center">监考老师2</th>
+        <th class="text-center">签到情况</th>
+        <th class="text-center">监考老师3</th>
+        <th class="text-center">签到情况</th>
+        <th class="text-center">监考老师4</th>
+        <th class="text-center">签到情况</th>
+        <th class="text-center">考试开始时间</th>
+        <th class="text-center">考试结束时间</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class="text-center">{$vo.name}</td>
+        <td class="text-center">{$vo.courseId}</td>
+        <td class="text-center">{$vo.door_number}</td>
+        <td class="text-center">
+            {$vo.watch_teacher_one}
+        </td>
+        <td class="text-center">
+        {if condition="$vo.status_one"}
+        <b style="color: #4c8ced;font-size:25px;">√</b>
+        {else /}
+        <b style="color: red;font-size:25px;">×</b>
+        {/if}
+        </td>
+        <td class="text-center">
+            {$vo.watch_teacher_second}
+        </td>
+
+        <td class="text-center">
+            {if condition="$vo.status_two"}
+            <b style="color: #4c8ced;font-size:25px;">√</b>
+            {else /}
+            <b style="color: red;font-size:25px;">×</b>
+            {/if}
+        </td>
+
+        <td class="text-center">
+          {if condition="$vo.watch_teacher_third==''"}
+              <p>无</p>
+          {else /}
+              <p>{$vo.watch_teacher_third}</p>
+          {/if}
+
+        </td>
+        <td class="text-center">
+            {if condition="$vo.status_three"}
+            <b style="color: #4c8ced;font-size:25px;">√</b>
+            {elseif condition="$vo.watch_teacher_third==''"}
+            无
+            {else /}
+            <b style="color: red;font-size: 25px;">×</b>
+            {/if}
+        </td>
+
+        <td class="text-center">
+            {if condition="$vo.watch_teacher_four==''"}
+            <p>无</p>
+            {else /}
+            <p>{$vo.watch_teacher_four}</p>
+            {/if}
+        </td>
+        <td class="text-center">
+            {if condition="$vo.status_four"}
+            <b style="color: #4c8ced;font-size:25px;">√</b>
+            {elseif condition="$vo.watch_teacher_four==''"}
+            无
+            {else /}
+            <b style="color: red;font-size:25px;">×</b>
+            {/if}
+        </td>
+        <td class="text-center">{$vo.begindate}</td>
+        <td class="text-center">{$vo.enddate}</td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+{if isset($page)}<p>{$page}</p>{/if}
+{/block}
+
+{block name="script"}
+{if auth("$classuri/tagset")}
+{/if}
+{/block}

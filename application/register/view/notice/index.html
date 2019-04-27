@@ -1,0 +1,410 @@
+{extend name='extra@admin/content'}
+
+
+{block name="style"}
+<style>
+    .ibox {
+        /*margin-left: 50px;*/
+        width: 100%;
+        height: calc(100vh - 50px);
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 0;
+        overflow: hidden;
+    }
+
+    .ibox-content {
+        padding: 0;
+    }
+
+    body {
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-family: "微软雅黑", "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+        font-size: 12px;
+        background-size: 100% 100%;
+        background-attachment: fixed;
+    }
+
+    .divbody {
+        background-size: 100% 100%;
+        background-attachment: fixed;
+    }
+
+    #mess {
+        /* position: absolute; */
+        width: 100%;
+        left: 0;
+        display: block;
+        top: 0;
+        line-height: 150px;
+        text-align: center;
+    }
+
+    #mess span {
+        font-size: 24px;
+    }
+
+    .container-fluid {
+        padding: 0;
+        min-width: 1210px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .businessConsultingWrapper {
+    }
+
+    .businessConsultingWrapper .consulting_content {
+        position: relative;
+    }
+
+    .businessConsultingWrapper .consulting_content .bg {
+        position: relative;
+        /* height: 100vh; */
+        overflow: hidden;
+    }
+
+    .businessConsultingWrapper .consulting_content .bg img {
+        display: block;
+        width: 1920px;
+        /* height: 100vh; */
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin-left: -960px;
+        z-index: 0;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container {
+        min-width: 1210px;
+        max-width: 1500px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section {
+        min-width: 1090px;
+        max-width: 1210px;
+        margin: 0 auto;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div {
+        /* margin-top: 160px; */
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item {
+        margin-bottom: 30px;
+        width: 100%;
+        background: #FFF;
+        height: 70px;
+        position: relative;
+        float: left;
+        padding: 0 15px;
+        box-sizing: border-box;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .submit {
+        width: 100%;
+        float: left;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .submit span {
+        display: block;
+        width: 400px;
+        height: 70px;
+        background: #fff;
+        font-size: 20px;
+        color: #7d7d7d;
+        text-align: center;
+        line-height: 70px;
+        border: 0;
+        margin: 0 auto !important;
+        cursor: pointer;
+        box-shadow: 0 8px 10px rgba(0, 0, 0, .1);
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .submit span:active {
+        background: #f5f5f5;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item :nth-child(add) {
+        background: #ccc;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .col-xs-2,
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .col-sm-2 {
+        width: 16.66666667%;
+        float: left;
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .content {
+        height: auto;
+        background: 0 0;
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .cos {
+        width: 100%;
+        padding: 0;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .content textarea {
+        resize: none;
+        border: none;
+        margin-top: 20px;
+        height: 200px;
+        width: 100%;
+        padding: 10px;
+        color: #7d7d7d;
+        background: #fff;
+        box-sizing: content-box;
+        font-size: 18px;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item label,
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item span {
+        min-width: 120px;
+        display: inline-block;
+        font-size: 20px;
+        color: #7d7d7d;
+        line-height: 70px;
+        vertical-align: bottom;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item .Preservation {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        line-height: 70px;
+        border: 0;
+        background: 0 0;
+        color: #7d7d7d;
+        padding: 0 10px 0 120px;
+        font-size: 18px;
+        box-sizing: border-box;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item .Preservation .Preservation_img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item .Preservation .Preservation_img img {
+        width: 70px;
+        height: 70px;
+        cursor: -moz-zoom-in;
+        cursor: -webkit-zoom-in;
+        cursor: zoom-in;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .consulting_div .item input {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        line-height: 70px;
+        border: 0;
+        background: 0 0;
+        color: #7d7d7d;
+        padding: 0 10px 0 120px;
+        font-size: 18px;
+        box-sizing: border-box;
+    }
+
+    .businessConsultingWrapper .consulting_content .consulting .container .section .clearfix {
+        display: table;
+        content: " ";
+        clear: both;
+        width: 100%;
+    }
+
+    .tanchuang {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tanchuang .bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, .5);
+        z-index: 2;
+    }
+
+    .tanchuang .container {
+        position: absolute;
+        width: 0px;
+        height: 0px;
+        background: #fff;
+        z-index: 3;
+    }
+
+    .tanchuang .container img {
+        width: 100%;
+        height: 100%;
+        cursor: -moz-zoom-out;
+        cursor: -webkit-zoom-out;
+        cursor: zoom-out;
+    }
+</style>
+{/block}
+
+
+{block name="content"}
+<!-- <main> -->
+<div class="divbody" style="background-image:url('__PUBLIC__/static/image/background.jpg');height: 100vh;">
+    <div class="businessConsultingWrapper container-fluid">
+        <div class="consulting_content" style="width:100vw;height:100vh;">
+            <div class="bg">
+
+            </div>
+            <div class="consulting">
+                <div class="container" style="height:100vh;">
+                    <div class="section" style="height:100vh;">
+                        <div class="consulting_div clearfix" style="height:100vh;">
+                            <div id="mess">
+                                <span>正在连接...</span>
+                            </div>
+                            <div class="item">
+                                <label for="title">标题</label>
+                                <input type="text" id="title" name="title" value="" placeholder="" autocomplete="off">
+                            </div>
+                            <div class="item">
+                                <span>图片</span>
+                                <div class="Preservation">
+                                    <div class="Preservation_img" style="pointer-events: none;"></div>
+                                </div>
+                                <input type="file" id="file" name="file" value="" placeholder="" style="display:none;" accept="image/png,image/jpeg">
+                                <label for="file"
+                                       style="position:absolute;right:0;text-align: center;background: #09BB07;color:#fff;cursor:pointer;">点我上传</label>
+                            </div>
+                            <div class="item content cos">
+                                <label for="word">详细内容</label>
+                                <textarea name="word" id="word" cols="30" rows="10"
+                                          style="box-sizing: border-box;font-size:26px;"></textarea>
+                            </div>
+                            <div class="submit">
+                                <span id="ss">提交</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="tanchuang" style="display:none;">-->
+        <!--<div class="bg" style=""></div>-->
+        <!--<div class="container" style="">-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+
+
+{/block}
+
+{block name="script"}
+
+<script>
+    var files;
+    var obj=0;
+    $('[type="file"]:input').change(function () {
+        var This = $(this);
+        files = this.files[0];
+        obj = new FileReader(); //新建读取文件对象
+        obj.readAsDataURL(files); //读取文件
+
+        obj.onload = function () { //读取完成后
+            This.siblings('.Preservation').find('.Preservation_img').find('img').remove();
+            This.siblings('.Preservation').find('.Preservation_img').append('<img data-tips-image src="' + this.result + '">');
+            This.siblings('.Preservation').find('.Preservation_img').css('pointer-events', 'auto')
+        }
+    });
+
+
+    if (window.WebSocket) {
+        var ws = new WebSocket('ws://fengyuan.fun:8000');
+        ws.onopen = function (e) {
+            console.log("连接服务器成功");
+            ws.send("Server");
+        }
+        ws.onclose = function (e) {
+            console.log("服务器关闭");
+        }
+        ws.onerror = function () {
+            console.log("连接出错");
+        }
+
+        ws.onmessage = function (e) {
+            $('#mess').find('span').html("请填写通知内容");
+            $('#ss').click(function () {
+                //标题title
+                var title = $('#title').val();
+                var word = $('#word').val();
+                if (title == '') {
+                    layer.alert('标题不能为空', {icon: 0});
+                } else {
+                    if (word == '') {
+                        layer.alert('内容不能为空', {icon: 0});
+                    } else {
+                        console.log(obj)
+                        if(obj == 0){
+                            layer.alert('请选择图片', {icon: 0});
+                        }else{
+                            $.ajax({
+                                url: "{:url('Notice/upload')}",
+                                type: "POST",
+                                dataType: "json",
+                                async: true,
+                                data: {
+                                    image: obj.result,
+                                    title: title,
+                                    word: word
+                                },
+                                success: function (res) {
+                                    console.log(res);
+                                    if (res.code) {
+                                        ws.send(title);
+                                        layer.alert('发布信息成功', {icon: 1});
+                                        setTimeout(function () {
+                                            location.reload();
+                                        }, 3000);
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            })
+        }
+    }
+</script>
+{/block}

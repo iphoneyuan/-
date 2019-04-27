@@ -1,0 +1,446 @@
+{extend name='extra@admin/content'}
+
+{block name="style"}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .ibox-content{
+        padding: 0;
+    }
+    #TenCenMap {
+        overflow: hidden;
+    }
+
+    #TenCenMap .container .button {
+        display: flex;
+        justify-content: center;
+        padding: 100px 0px;
+    }
+
+    #TenCenMap .container .button span {
+        display: block;
+        padding: 8px;
+        color: #fff;
+        background-color: #4c8ced;
+        cursor: pointer;
+    }
+
+    #TenCenMap .container .button .LatLng {
+        box-sizing: border-box;
+        margin: 0 20px;
+        width: 400px;
+        padding: 0 20px;
+        font-size: 18px;
+    }
+
+    #TenCenMap #container {
+        display: flex;
+        margin: 0 auto;
+        width: 552px;
+        height: 300px;
+    }
+
+    #TenCenMap #AllMap {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        /* margin: 0 auto; */
+        opacity: 0;
+        display: flex;
+        flex-direction: column;
+        top: 0;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    #TenCenMap #AllMap #Show {
+        z-index: 1000;
+    }
+
+    #TenCenMap #AllMap #Show .Search {
+        display: flex;
+        background-color: #fff;
+    }
+
+    #TenCenMap #AllMap #Show .Search .LatLng_repeat {
+        width: 800px;
+        height: 40px;
+        font-size: 18px;
+        font-weight: 700;
+        box-sizing: border-box;
+        border-right: none;
+        border-top: none;
+        border-left: none;
+        padding: 0 20px;
+    }
+
+    #TenCenMap #AllMap #Show .MapPosition {
+        position: relative;
+    }
+
+    #TenCenMap #AllMap #Show .MapPosition #Container {
+        width: 800px;
+        height: 500px;
+        overflow: hidden;
+        margin: 0;
+        font-family: "微软雅黑";
+    }
+
+    #TenCenMap #AllMap #Show .MapPosition .input {
+        position: absolute;
+        top: 20px;
+        left: 90px;
+    }
+
+    #TenCenMap #AllMap #Show .MapPosition .input input {
+        height: 24px;
+        border: none;
+        box-sizing: border-box;
+        padding: 0 10px;
+    }
+
+    #TenCenMap #AllMap #Show .MapPosition .OnSubmitHide {
+        position: absolute;
+        top: 5px;
+        right: 90px;
+    }
+
+    #TenCenMap #AllMap #Show .MapPosition .OnSubmitHide span {
+        cursor: pointer;
+        display: block;
+        overflow: hidden;
+        padding: 1px 6px;
+        line-height: 23px;
+        text-align: center;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    #TenCenMap #AllMap #Hide {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    #TenCenMap .Position_Bottom {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+    }
+
+    #TenCenMap .Position_Bottom input {
+        display: block;
+        padding: 8px;
+        color: #fff;
+        background-color: #4c8ced;
+        cursor: pointer;
+    }
+</style>
+{/block}
+
+{block name='content'}
+<body style="overflow:hidden;">
+    <div id="TenCenMap">
+        <div class="container">
+            <div class="button">
+                <div onclick="OnShow()">
+                    <span>戳我图上选点</span>
+                </div>
+                <input class="LatLng" type="text" id="InputLatLng" radius="{$radius.radius}" name="InputLatLng"
+                       value="{$list.latitude},{$list.longitude}" readonly>
+            </div>
+        </div>
+        <div id="container"></div>
+        <div id="AllMap">
+            <div id="Show">
+                <div class="Search">
+                    <input class="LatLng_repeat" type="text" id="LatLng_repeat">
+                </div>
+                <div class="MapPosition">
+                    <div id="Container"></div>
+                    <div class="input">
+                        <input type="text" placeholder="请输入地点" id="place">
+                        <span onclick="OnSearch()" style="background-color: #4c8ced;color: #fff;padding: 3px 8px;">搜索</span>
+                    </div>
+                    <div class="OnSubmitHide" onclick="OnHide()">
+                        <span>保存</span>
+                    </div>
+                </div>
+            </div>
+            <div id="Hide" onclick="OnHide()"></div>
+        </div>
+
+
+    </div>
+
+
+
+</body>
+
+{/block}
+
+{block name="script"}
+
+<script>
+
+    //分解InputLatLng的值
+    var InputLatLng = $('#InputLatLng').val();
+    var InputLatLngS = InputLatLng.split(',')
+    var InputLat = InputLatLngS[0];
+    var InputLng = InputLatLngS[1]
+
+    //设置鼠标点击保存的状态
+    var ClickType = "";
+    //创建大地图
+    var map = new qq.maps.Map(document.getElementById("Container"), {
+        // 地图的中心地理坐标。
+        center: new qq.maps.LatLng(InputLat, InputLng),
+        mapTypeId: qq.maps.MapTypeId.ROADMAP,
+        zoom: 18,
+    });
+    //创建小地图
+    var map_small = new qq.maps.Map(document.getElementById("container"), {
+        center: new qq.maps.LatLng(InputLat, InputLng),
+        mapTypeId: qq.maps.MapTypeId.ROADMAP,
+        zoom: 14,
+        draggable: false, //设置是否可以拖拽
+        scrollwheel: false, //设置是否可以滚动
+        disableDoubleClickZoom: true //设置是否可以双击放大
+    })
+
+    //创建小地图的Marker
+    var marker_small = new qq.maps.Marker({
+        position: new qq.maps.LatLng(InputLat, InputLng),
+        map: map_small,
+        draggable: false, //设置是否可以拖拽
+        scrollwheel: false, //设置是否可以滚动
+        disableDoubleClickZoom: true //设置是否可以双击放大
+    })
+
+    //创建Marker
+    var marker = new qq.maps.Marker({
+        //设置Marker的位置坐标
+        position: new qq.maps.LatLng(InputLat, InputLng),
+        //设置显示Marker的地图
+        map: map
+    });
+    //创建infoWin
+    var infoWin = new qq.maps.InfoWindow({
+        map: map
+    });
+    infoWin.open();
+    infoWin.setContent(InputLat + "," + InputLng);
+    infoWin.setPosition(new qq.maps.LatLng(InputLat, InputLng));
+    //绑定鼠标事件
+    qq.maps.event.addListener(map, 'click', function (result) {
+        // alert('您点击了地图.');
+        $("#LatLng_repeat").val(result.latLng.lat + "," + result.latLng.lng)
+        map.panTo(new qq.maps.LatLng(result.latLng.lat, result.latLng.lng));
+
+        if (marker) {
+            circle1.setMap(null)
+            marker.setMap(null)
+            marker = new qq.maps.Marker({
+                //设置Marker的位置坐标
+                position: new qq.maps.LatLng(result.latLng.lat, result.latLng.lng),
+                //设置显示Marker的地图
+                map: map
+            });
+            circle1 = new qq.maps.Circle({
+                center: new qq.maps.LatLng(result.latLng.lat, result.latLng.lng),
+                map: map,
+                radius: parseInt(radius),
+                visible: true,
+                zIndex: 1000,
+                fillColor: new qq.maps.Color(0, 0, 0, .3)
+            })
+            infoWin.open();
+            infoWin.setContent(result.latLng.lat + "," + result.latLng.lng);
+            infoWin.setPosition(new qq.maps.LatLng(result.latLng.lat, result.latLng.lng));
+        } else {
+            marker = new qq.maps.Marker({
+                //设置Marker的位置坐标
+                position: new qq.maps.LatLng(result.latLng.lat, result.latLng.lng),
+                //设置显示Marker的地图
+                map: map
+            });
+            circle1 = new qq.maps.Circle({
+                center: new qq.maps.LatLng(result.latLng.lat, result.latLng.lng),
+                map: map,
+                radius: parseInt(radius),
+                visible: true,
+                zIndex: 1000,
+                fillColor: new qq.maps.Color(0, 0, 0, .3)
+            })
+        }
+    });
+    var radius = $('#InputLatLng').attr('radius');
+    var circle = new qq.maps.Circle({
+        center: new qq.maps.LatLng(InputLat, InputLng),
+        map: map_small,
+        radius: parseInt(radius),
+        visible: true,
+        zIndex: 1000,
+        fillColor: new qq.maps.Color(0, 0, 0, .3)
+    })
+    var circle1 = new qq.maps.Circle({
+        center: new qq.maps.LatLng(InputLat, InputLng),
+        map: map,
+        radius: parseInt(radius),
+        visible: true,
+        zIndex: 1000,
+        fillColor: new qq.maps.Color(0, 0, 0, .3)
+    })
+
+    //戳我选点
+    function OnShow() {
+        $("#AllMap").css('opacity', '1');
+        $("#AllMap").css('pointer-events', 'auto');
+        var InputLatLng = $('#InputLatLng').val();
+        $("#LatLng_repeat").val(InputLatLng)
+    }
+
+    //获取客户端IP
+    var citylocation = new qq.maps.CityService({
+        complete: function (result) {
+            city = result.detail.name;
+        }
+    });
+    var searchService = new qq.maps.SearchService({
+        complete: function (results) {
+            if (results.type === "CITY_LIST") {
+                alert("当前检索结果分布较广，请指定城市进行检索");
+                return;
+            }
+            var pois = results.detail.pois;
+            var latlngBounds = new qq.maps.LatLngBounds();
+            var poi = pois[0];
+            latlngBounds.extend(poi.latLng);
+            marker = new qq.maps.Marker({
+                map: map,
+                position: poi.latLng
+            });
+            marker.setTitle(poi.name);
+            map.fitBounds(latlngBounds);
+            $("#LatLng_repeat").val(poi.latLng.lat + "," + poi.latLng.lng);
+            SearchLat = poi.latLng.lat;
+            SearchLng = poi.latLng.lng;
+
+            circle1.setMap(null);
+            circle1 = new qq.maps.Circle({
+                center: new qq.maps.LatLng(SearchLat, SearchLng),
+                map: map,
+                radius: parseInt(radius),
+                visible: true,
+                zIndex: 1000,
+                fillColor: new qq.maps.Color(0, 0, 0, .3)
+            })
+        }
+    });
+    var city = "";
+    //自动搜索
+    var ap = new qq.maps.place.Autocomplete(document.getElementById('place'), {
+        offset: new qq.maps.Size(0, 5),
+        location: city
+    });
+    //点击获取
+    qq.maps.event.addListener(ap, "confirm", function (res) {
+        marker.setMap(null)
+        searchService.setLocation(city);
+        searchService.search(res.value);
+    });
+
+    //确认搜索地址
+    function OnSearch() {
+        marker.setMap(null)
+        var place = $("#place").val();
+        searchService.setLocation(city);
+        searchService.search(place);
+    }
+    function OnHide() {
+        $("#Show").css('z-index', '0');
+        Modal.text({
+            "content": "确定保存?",
+            "btn": [{
+                "text": "取消",
+                "type": "btn-ghost",
+                // "time": 10,
+                "onFn": function () {
+                    $('#Show').css('z-index', '1000')
+                    $("#AllMap").css('opacity', '0');
+                    $("#AllMap").css('pointer-events', 'none');
+                }
+            }, {
+                "text": "确认",
+                "type": "btn-primary",
+                "onFn": function () {
+                    $('#Show').css('z-index', '1000')
+                    $('#AllMap').css('opacity', '0')
+                    $('#AllMap').css('pointer-events', 'none');
+                    $('#AllMap').css('z-index', '0');
+                    var LatLng_repeat = $('#LatLng_repeat').val();
+                    var LatLng_repeatS = LatLng_repeat.split(',')
+
+                    $.ajax({
+                        url: '{:url("Position/upposition")}',
+                        async: 'false',
+                        type: 'POST',
+                        data: {
+                            'latitude': LatLng_repeatS[0],
+                            'longitude': LatLng_repeatS[1]
+                        },
+                        success(res) {
+                            if (res.error_code == 1) {
+                                $('#InputLatLng').val(LatLng_repeat);
+                                if (marker_small) {
+                                    marker_small.setMap(null)
+                                    circle.setMap(null);
+                                    marker_small = new qq.maps.Marker({
+                                        //设置Marker的位置坐标
+                                        position: new qq.maps.LatLng(LatLng_repeatS[0], LatLng_repeatS[1]),
+                                        //设置显示Marker的地图
+                                        map: map_small
+                                    });
+                                    circle1 = new qq.maps.Circle({
+                                        center: new qq.maps.LatLng(LatLng_repeatS[0], LatLng_repeatS[1]),
+                                        map: map_small,
+                                        radius: parseInt(radius),
+                                        visible: true,
+                                        zIndex: 1000,
+                                        fillColor: new qq.maps.Color(0, 0, 0, .3)
+                                    })
+                                    map_small.panTo(new qq.maps.LatLng(LatLng_repeatS[0], LatLng_repeatS[1]))
+                                } else {
+                                    marker_small = new qq.maps.Marker({
+                                        //设置Marker的位置坐标
+                                        position: new qq.maps.LatLng(LatLng_repeatS[0], LatLng_repeatS[1]),
+                                        //设置显示Marker的地图
+                                        map: map_small
+                                    });
+                                    circle = new qq.maps.Circle({
+                                        center: new qq.maps.LatLng(LatLng_repeatS[0], LatLng_repeatS[1]),
+                                        map: map_small,
+                                        radius: parseInt(radius),
+                                        visible: true,
+                                        zIndex: 1000,
+                                        fillColor: new qq.maps.Color(0, 0, 0, .3)
+                                    })
+                                    map_small.panTo(new qq.maps.LatLng(LatLng_repeatS[0], LatLng_repeatS[1]))
+                                }
+                            }else{
+                                alert(修改失败);
+                            }
+                        }
+                    });
+                }
+            }],
+        })
+    }
+</script>
+{/block}

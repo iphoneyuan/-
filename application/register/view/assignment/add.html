@@ -1,0 +1,254 @@
+<form style='padding:25px 30px 20px 0px' action="{:url('register/Assignment/upmessage')}" method="post"
+      enctype="multipart/form-data">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">科目名称</label>
+        <div class="layui-input-block">
+            <input name="name" pattern="^.{2,}$"
+                   title="科目名称不少于两位" placeholder="请输入科目名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">科目编号</label>
+        <div class="layui-input-block">
+            <!--<input name="courseId" required="required" pattern="^[A-Za-z0-9]+$"-->
+                   <!--title="科目编号只限定英文和数字组合" placeholder="请输入科目编号,如AG21025"  class="layui-input">-->
+            <select name="courseId" required="required">
+                <option value="">请选择课程</option>
+                {foreach $course as $vo}
+                <option value="{$vo.courseId}">{$vo.name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">考场</label>
+        <div class="layui-input-block">
+            <!--<input name="door_number" required="required" pattern="^[A-Za-z0-9]+$" placeholder="请输入考场，如U301"-->
+                   <!--class="layui-input" title="考场号只限定英文和数字组合">-->
+            <select name="door_number" required="required">
+                <option value="">请选择考场</option>
+                {foreach $classroom as $vo}
+                <option value="{$vo.door_number}">{$vo.door_number}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">周数</label>
+        <div class="layui-input-block">
+            <input name="week" placeholder="必须为纯阿拉伯数字" required="required" pattern="^[0-9]*$" class="layui-input"
+                   title="必须为纯数字">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">主考老师</label>
+        <div class="layui-input-block">
+            <!--<input name="main_teacher" placeholder="请输入主考老师姓名或编号"  class="layui-input">-->
+            <select name="main_teacher">
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">副考老师</label>
+        <div class="layui-input-block">
+            <!--<input name="second_teacher"  placeholder="请输入副考老师姓名或编号" class="layui-input" >-->
+            <select name="second_teacher">
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">巡考老师1</label>
+        <div class="layui-input-block">
+            <!--<input name="walk_teacher_one"  placeholder="请输入巡考老师姓名或编号" required="required" pattern="^.{2,}$"-->
+                   <!--class="layui-input" title="姓名不少于两位">-->
+            <select name="walk_teacher_one">
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">巡考老师2</label>
+        <div class="layui-input-block">
+            <!--<input name="walk_teacher_two"  placeholder="请输入巡考老师姓名或编号" pattern="^.{2,}$"-->
+                   <!--class="layui-input" title="姓名不少于两位">-->
+            <select name="walk_teacher_two">
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">监考老师1</label>
+        <div class="layui-input-block">
+            <!--<input name="watch_teacher_one" value='' placeholder="请输入监考老师姓名或编号" required="required" pattern="^.{2,}$"-->
+                   <!--class="layui-input" title="姓名不少于两位">-->
+            <select name="watch_teacher_one" required="required" >
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">监考老师2</label>
+        <div class="layui-input-block">
+            <!--<input name="watch_teacher_second" value='' placeholder="请输入监考老师姓名或编号"-->
+                   <!--class="layui-input">-->
+            <select name="watch_teacher_second" required="required" >
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">监考老师3</label>
+        <div class="layui-input-block">
+            <!--<input name="watch_teacher_third" placeholder="请输入监考老师姓名或编号"-->
+                   <!--class="layui-input">-->
+            <select name="watch_teacher_third">
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">监考老师4</label>
+        <div class="layui-input-block">
+            <!--<input name="watch_teacher_four" placeholder="请输入监考老师姓名或编号"-->
+                   <!--class="layui-input">-->
+            <select name="watch_teacher_four">
+                <option value="">请选择教师</option>
+                {foreach $teacher as $vo}
+                <option value="{$vo.number}">{$vo.name_id}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">开始时间</label>
+        <div class="layui-input-block">
+            <input name="begindate" id="begindate" readonly="readonly" placeholder="请输入开始时间" required="required"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">结束时间</label>
+        <div class="layui-input-block">
+            <input name="enddate" id="enddate" readonly="readonly" placeholder="请输入开始时间" required="required"
+                   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">星期</label>
+        <div class="layui-input-block">
+            <select name="day" lay-verify="required" required="required" class="layui-select">
+                <option value="">请选择相应的星期数</option>
+                <option value="一">一</option>
+                <option value="二">二</option>
+                <option value="三">三</option>
+                <option value="四">四</option>
+                <option value="五">五</option>
+                <option value="六">六</option>
+                <option value="日">日</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item text-center">
+        <button style="background-color:#4c8ced;" class="layui-btn" type='submit'>保存数据</button>
+        <span class="layui-btn layui-btn-small layui-btn-danger " type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</span>
+    </div>
+</form>
+<style>
+    .layui-input:focus::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        opacity: 0;
+        transition: all .3s;
+    }
+    .layui-input:focus:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .layui-input:focus::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .layui-input:focus:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        transition: all .3s;
+        opacity: 0;
+    }
+    label{
+        text-align-last: justify;
+    }
+    select{
+        height: 38px;
+        width: 100%;
+        border: 1px solid #e6e6e6;
+        border-radius: 2px;
+        padding: 0 6px;
+        color:#7d7979;
+    }
+</style>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $(".img").change(function () {
+            $(".showimg").attr("src", URL.createObjectURL($(this)[0].files[0]));
+        });
+    });
+
+    laydate.render({
+        elem: '#begindate'
+        , value: ''
+        , type: 'datetime'
+        , isInitValue: true //是否允许填充初始值，默认为 true
+    });
+
+    laydate.render({
+        elem: '#enddate'
+        , value: ''
+        , type: 'datetime'
+        , isInitValue: true //是否允许填充初始值，默认为 true
+    });
+</script>
+
+
+
+
+

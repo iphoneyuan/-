@@ -1,0 +1,104 @@
+<form style='padding:25px 30px 20px 0px' action="{:url('register/Clock/replace')}" method="post"
+      enctype="multipart/form-data">
+
+    <div class="layui-form-item" hidden >
+        <div class="layui-input-block">
+            <input type="hidden"  name="id"  class="layui-input" value='{$list.id}' >
+        </div>
+    </div>
+
+    {if condition="$list.watch_teacher_one!=''"}
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 86px">监考老师1</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_one" value='{$list.watch_teacher_one}' required="required" pattern="^.{2,}$" title="姓名不少于两位" placeholder="请输入标题信息" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" >签到情况</label>
+        <div class="layui-input-block">
+            <select name="status_one" lay-verify="required" required="required" class="layui-select" style="width: 660px">
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+    </div>
+    {else /}
+
+    {/if}
+
+    {if condition="$list.watch_teacher_second!=''"}
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 86px">监考老师2</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_second" value='{$list.watch_teacher_second}' required="required"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">签到情况</label>
+        <div class="layui-input-block">
+            <select name="status_two" lay-verify="required" required="required" class="layui-select"  style="width: 660px">
+                <option value="0">否</option>
+                <option value="1">是</option>
+            </select>
+        </div>
+    </div>
+    {else /}
+
+    {/if}
+
+    {if condition="$list.watch_teacher_third!=''"}
+    <div class="layui-form-item">
+        <label class="layui-form-label"  style="width: 86px">监考老师3</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_third" value='{$list.watch_teacher_third}' required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">签到情况</label>
+            <div class="layui-input-block">
+                <select name="status_three" lay-verify="required" required="required" class="layui-select"  style="width: 660px">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </div>
+        </div>
+    {else /}
+
+    {/if}
+
+    {if condition="$list.watch_teacher_four!=''"}
+    <div class="layui-form-item">
+        <label class="layui-form-label"  style="width: 86px">监考老师4</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_four" value='{$list.watch_teacher_four}' required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">签到情况</label>
+            <div class="layui-input-block">
+                <select name="status_four" lay-verify="required" required="required" class="layui-select"  style="width: 660px">
+                    <option value="0">否</option>
+                    <option value="1">是</option>
+                </select>
+            </div>
+    </div>
+    {else /}
+
+    {/if}
+
+
+    <div class="layui-form-item text-center">
+        <button style="background-color:#4c8ced;" class="layui-btn" type='submit'>保存数据</button>
+        <span class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</span>
+    </div>
+</form>
+
+
+
+
+

@@ -1,0 +1,151 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+
+
+{/block}
+
+{block name="content"}
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="col-xs-3">
+        <div class="form-group">
+            <input type="text" name="name" value="{$Think.get.search|default=''}" placeholder="{:lang('请输入姓名/工号')}" class="input-sm form-control input-sear">
+        </div>
+    </div>
+
+    <input type="hidden" name="page" value="0" >
+    <div class="col-xs-1">
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-white ico-search"><i class="fa fa-search"></i> {:lang('搜索')}</button>
+        </div>
+    </div>
+</form>
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th class='list-table-check-td'>
+
+        </th>
+        <th class="text-center">姓名</th>
+        <th class="text-center">头像</th>
+        <th class="text-center">昵称</th>
+        <th class="text-center">性别</th>
+        <th class="text-center">工号</th>
+        <th class="text-center">所在系部</th>
+        <th class="text-center">操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class='list-table-sort-td'>
+            <input name="id" type="checkbox" class="list-sort-input" value="{$vo.id}"/>
+        </td >
+        <td class="text-center">{$vo.name}</td>
+        <td class="text-center">
+            {if condition="($vo.imageurl=='')"}<p style="color: red">尚未设置</p>
+            {else /}
+            <img data-tips-image style="width: 3rem;height: 3rem" src="https://fengyuan.site/hkr/static{$vo.imageurl}" alt="" />
+            {/if}
+        </td>
+        <td class="text-center">
+            {if condition="($vo.nickname=='')"}<p style="color: red">尚未设置</p>
+            {else /} {$vo.nickname}
+            {/if}
+        </td>
+        <td class="text-center">
+            {if condition="$vo.sex"}男
+            {else /} 女
+            {/if}
+        </td>
+        <td class="text-center">{$vo.number}</td>
+        <td class="text-center">{$vo.department}</td>
+
+        <td class="text-center" style="width: 200px" nowrap>
+            <a  data-modal="{:url('changepassword',['id'=>$vo['id']])}" href="javascript:void(0)" >修改密码</a>
+            <span class="text-explode">|</span>
+            <a  data-modal="{:url('showmessage',['id'=>$vo['id']])}" href="javascript:void(0)" >修改个人信息</a>
+            <span class="text-explode">|</span>
+            <a  style="color:#FF5722;" data-action="{:url('ruandel')}" href="javascript:void(0)" data-update="{$vo['id']}">删除</a>
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+</table>
+{if isset($page)}<p>{$page}</p>{/if}
+<div class="nowrap"  >
+    <button onclick='delruanpersonall()' class='layui-btn layui-btn-small' style="background-color:#FF5722;">批量删除</button>
+</div>
+{/block}
+
+{block name="script"}
+{if auth("$classuri/tagset")}
+
+<style>
+    .form-group button{
+        height: 30px;
+        box-sizing: border-box;
+    }
+    .form-group button:hover{
+        background: #4c8ced;
+        color: #fff;
+    }
+    .input-sm:focus::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        opacity: 0;
+        transition: all .3s;
+    }
+    .input-sm:focus:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .input-sm:focus::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .input-sm:focus:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        transition: all .3s;
+        opacity: 0;
+    }
+</style>
+<script>
+
+    function delruanpersonall() {
+        var id =$("input:checkbox[name='id']:checked").map(function(index,elem) {
+            return $(elem).val();
+        }).get().join(',');
+        if(id==""){
+            layer.alert('您尚未勾选信息', {icon: 2});
+        }else {
+            layer.confirm('是否确定删除？', {
+                btn: ['确定', '取消'],
+            }, function (index) {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    data: {"id": id},
+                    url: "{:url('Person/delruanpersonall')}",
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.close(index);
+                        if (res.error_code == 1) {
+                            layer.alert('删除个人信息成功', {icon: 1});
+                            setTimeout(function () {
+                                location.reload();
+                            },2000);
+                        } else {
+                            layer.alert('删除个人信息失敗', {icon: 2});
+                        }
+                    }
+                })
+            });
+        }
+    }
+</script>
+{/if}
+{/block}

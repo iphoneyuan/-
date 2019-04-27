@@ -1,0 +1,80 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="{:url('register/Classroom/addclassroom')}"  method="post" enctype="multipart/form-data" >
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">课室名称</label>
+        <div class="layui-input-block">
+            <input name="name" required="required" placeholder="请输入课室名称"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">课室编号</label>
+        <div class="layui-input-block">
+            <input name="door_number"   required="required" placeholder="请输入课室编号"  class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item text-center">
+        <button style="background-color:#4c8ced;" class="layui-btn" type='submit'>保存数据</button>
+        <span class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</span>
+    </div>
+</form>
+<script>
+    $(function () {
+        $(".img").change(function(){
+            $(".showimg").attr("src",URL.createObjectURL($(this)[0].files[0]));
+        });
+    });
+
+</script>
+<style>
+    .layui-input:focus::-webkit-input-placeholder {
+        /* WebKit, Blink, Edge */
+        opacity: 0;
+        transition: all .3s;
+    }
+    .layui-input:focus:-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .layui-input:focus::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .layui-input:focus:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
+        transition: all .3s;
+        opacity: 0;
+    }
+    .showimg{
+        width: 70px;
+        height: 50px;
+        margin-left: 15px;
+    }
+    label{
+        position: relative;
+    }
+
+    .img{
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+
+    #btn{
+        padding: 5px 10px;
+        background: #00b0f0;
+        color: #FFF;
+        border: none;
+        border-radius: 5px;
+    }
+
+    img[src='']{
+        visibility: hidden;
+    }
+</style>

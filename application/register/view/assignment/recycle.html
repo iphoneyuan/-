@@ -1,0 +1,130 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+
+
+{/block}
+
+{block name="content"}
+<div class="nowrap" style="margin-bottom:10px"  >
+    <button onclick='delall()' class='layui-btn layui-btn-small' style="background-color:#FF5722;">批量删除</button>
+    <button onclick='delhuanall()' class='layui-btn layui-btn-small' style="background-color:#4c8ced;">批量还原</button>
+</div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th class='list-table-check-td'>
+
+        </th>
+        <th class="text-center">科目名称</th>
+        <th class="text-center">考场</th>
+        <th class="text-center">主考老师</th>
+        <th class="text-center">副考老师</th>
+        <th class="text-center">巡考老师</th>
+        <th class="text-center">监考老师</th>
+        <th class="text-center">教学周</th>
+        <th class="text-center">星期</th>
+        <th class="text-center">考试开始时间</th>
+        <th class="text-center">考试结束时间</th>
+        <th class="text-center">操作</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {foreach $list as $key=>$vo}
+    <tr>
+        <td class='list-table-sort-td'>
+            <input name="id" value="{$vo.id}"  type="checkbox" class="list-sort-input"/>
+        </td >
+        <td class="text-center">{$vo.name}</td>
+        <td class="text-center">{$vo.door_number}</td>
+        <td class="text-center">{$vo.main_teacher}</td>
+        <td class="text-center">{$vo.second_teacher}</td>
+        <td class="text-center">{$vo.walk_teacher_one}&nbsp{$vo.walk_teacher_two}</td>
+        <td class="text-center">{$vo.watch_teacher_one}&nbsp{$vo.watch_teacher_second}&nbsp{$vo.watch_teacher_third}</td>
+        <td class="text-center">{$vo.week}</td>
+        <td class="text-center">{$vo.day}</td>
+        <td class="text-center">{$vo.begindate}</td>
+        <td class="text-center">{$vo.enddate}</td>
+        <td class="text-center" style="width: 120px" nowrap>
+            <a  data-modal="{:url('reset',['id'=>$vo['id']])}" href="javascript:void(0)" >还原</a>
+            <span class="text-explode">|</span>
+            <a style="color:#FF5722;" data-action="{:url('del')}" href="javascript:void(0)" data-update="{$vo['id']}">删除</a>
+        </td>
+    </tr>
+    {/foreach}
+    </tbody>
+    {if isset($page)}<p>{$page}</p>{/if}
+</table>
+{/block}
+
+{block name="script"}
+{if auth("$classuri/tagset")}
+<script>
+    function delall(){
+        var id =$("input:checkbox[name='id']:checked").map(function(index,elem) {
+            return $(elem).val();
+        }).get().join(',');
+        if(id==""){
+            layer.alert('您尚未勾选信息', {icon: 2});
+        }else {
+            layer.confirm('是否确定删除？', {
+                btn: ['确定', '取消'],
+            }, function (index) {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    data: {"id": id},
+                    url: "{:url('delall')}",
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.close(index);
+                        if (res.error_code == 1) {
+                            layer.alert('删除任務信息成功', {icon: 1});
+                            setTimeout(function () {
+                                location.reload();
+                            },2000);
+                        } else {
+                            layer.alert('删除任務信息失敗', {icon: 2});
+                        }
+                    }
+                })
+            });
+        }
+    }
+
+    function delhuanall() {
+        var id =$("input:checkbox[name='id']:checked").map(function(index,elem) {
+            return $(elem).val();
+        }).get().join(',');
+        if(id==""){
+            layer.alert('您尚未勾选信息', {icon: 2});
+        }else {
+            layer.confirm('是否确定还原？', {
+                btn: ['确定', '取消'],
+            }, function (index) {
+                $.ajax({
+                    async: false,
+                    type: "post",
+                    data: {"id": id},
+                    url: "{:url('delhuanall')}",
+                    datatype: 'json',
+                    success: function (res) {
+                        layer.close(index);
+                        if (res.error_code == 1) {
+                            layer.alert('还原任務信息成功', {icon: 1});
+                            setTimeout(function () {
+                                location.reload();
+                            },2000);
+                        } else {
+                            layer.alert('还原任務信息失敗', {icon: 2});
+                        }
+                    }
+                })
+            });
+        }
+    }
+</script>
+{/if}
+{/block}

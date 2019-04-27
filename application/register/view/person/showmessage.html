@@ -1,0 +1,84 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="{:url('register/Person/changemessage')}"  method="post" enctype="multipart/form-data" >
+
+    <div class="layui-form-item" hidden >
+        <div class="layui-input-block">
+            <input type="hidden"  name="id"  class="layui-input" value='{$db.id}' >
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input name="name" value="{$db.name}" required="required"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">昵称</label>
+        <div class="layui-input-block">
+            <input  name="nickname" value="{$db.nickname}" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">工号</label>
+        <div class="layui-input-block">
+            <input name="number" value="{$db.number}"  required="required"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门</label>
+        <div class="layui-input-block">
+            <input  name="department" value="{$db.department}"  required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">性别</label>
+        <div class="layui-input-block">
+            <input  name="sex" value="{$db.sex}" placeholder="请输入性别" required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item text-center">
+        <button style="background-color:#4c8ced;" class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+<script>
+    $(function () {
+        $(".img").change(function(){
+            $(".showimg").attr("src",URL.createObjectURL($(this)[0].files[0]));
+        });
+    });
+</script>
+<style>
+    .showimg{
+        width: 70px;
+        height: 50px;
+        margin-left: 15px;
+    }
+    label{
+        position: relative;
+    }
+
+    .img{
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+
+    #btn{
+        padding: 5px 10px;
+        background: #00b0f0;
+        color: #FFF;
+        border: none;
+        border-radius: 5px;
+    }
+
+    img[src='']{
+        visibility: hidden;
+    }
+</style>

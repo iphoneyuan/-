@@ -1,0 +1,158 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="{:url('register/Assignment/replace')}"  method="post" enctype="multipart/form-data" >
+
+    <div class="layui-form-item" hidden >
+        <div class="layui-input-block">
+            <input type="hidden"  name="id"  class="layui-input" value='{$list.id}' >
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">科目名称</label>
+        <div class="layui-input-block">
+            <input name="name" value='{$list.name}'  pattern="^.{2,}$"
+                   title="姓名不少于两位" placeholder="请输入标题信息" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" >科目编号</label>
+        <div class="layui-input-block">
+            <input name="courseId" required="required" pattern="^[A-Za-z0-9]+$"
+                   title="科目编号只限定英文和数字组合" placeholder="请输入科目编号,如AG21025" value="{$list.courseId}"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">考场</label>
+        <div class="layui-input-block">
+            <input name="door_number" value='{$list.door_number}' required="required"  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">教学周</label>
+        <div class="layui-input-block">
+            <input name="week" value='{$list.week}' required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">星期</label>
+        <div class="layui-input-block">
+            <input name="day" value='{$list.day}' required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">主考老师</label>
+        <div class="layui-input-block">
+            <input name="main_teacher" value='{$list.main_teacher}'   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">副考老师</label>
+        <div class="layui-input-block">
+            <input name="second_teacher" value='{$list.second_teacher}'   class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">巡考老师1</label>
+        <div class="layui-input-block">
+            <input name="walk_teacher_one" value='{$list.walk_teacher_one}'  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">巡考老师2</label>
+        <div class="layui-input-block">
+            <input name="walk_teacher_two" value='{$list.walk_teacher_two}' class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">监考老师1</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_one" value='{$list.watch_teacher_one}' required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">监考老师2</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_second" value='{$list.watch_teacher_second}'  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">监考老师3</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_third" value='{$list.watch_teacher_third}'  class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">监考老师4</label>
+        <div class="layui-input-block">
+            <input name="watch_teacher_four" value='{$list.watch_teacher_four}'  class="layui-input">
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间</label>
+        <div class="layui-input-block">
+            <input name="begindate" value='{$list.begindate}' required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间</label>
+        <div class="layui-input-block">
+            <input name="enddate" value='{$list.enddate}' required="required" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item text-center">
+        <button style="background-color:#4c8ced;" class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+<script>
+    $(function () {
+        $(".img").change(function(){
+            $(".showimg").attr("src",URL.createObjectURL($(this)[0].files[0]));
+        });
+    });
+</script>
+
+<style>
+    .showimg{
+        width: 70px;
+        height: 50px;
+        margin-left: 15px;
+    }
+    label{
+        position: relative;
+    }
+
+    .img{
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+
+    #btn{
+        padding: 5px 10px;
+        background: #00b0f0;
+        color: #FFF;
+        border: none;
+        border-radius: 5px;
+    }
+
+    img[src='']{
+        visibility: hidden;
+    }
+</style>

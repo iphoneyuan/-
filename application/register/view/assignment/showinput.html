@@ -1,0 +1,29 @@
+<form style='padding:25px 30px 20px 0px' action="{:url('register/Assignment/input')}" method="post" enctype="multipart/form-data">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">上传文件</label>
+            <div class="layui-input-block" style="display: flex;align-items: center;">
+            <input id="label" type="file" name="input" placeholder="请点击上传" style="border-top: 100px;display: none;" >
+                <label for="label" style="min-height: 36px;display: flex;align-items: center;">
+                    <span style="width: 60px;background-color: #4c8ced;color:#fff;display: block;text-align: center;">选择文件</span>
+                </label>
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item text-center">
+        <button style="background-color:#4c8ced;" class="layui-btn" type='submit' onclick="load()">保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+</form>
+<script type="text/javascript" charset="utf-8">
+    function load(){
+        layer.load(1);
+    }
+</script>
+
+
+
+
+

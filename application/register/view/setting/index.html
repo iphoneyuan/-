@@ -1,0 +1,47 @@
+<form style='padding:25px 10px' action="{:url('Setting/up')}" method="post" enctype="multipart/form-data">
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">允许打卡时间时长</label>
+        <div class="layui-input-block">
+            <input name="punch_time" value='{$list.punch_time}小时' required="required" pattern="^.{2,}$" title="姓名不少于两位" class="layui-input">
+            <p style="font-size: 8px;color: red;font-weight: bold">(注意*:考试开考前起止)</p>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label" >允许巡考教师评价时长</label>
+        <div class="layui-input-block">
+            <input name="walk_time" value='{$list.walk_time}小时' required="required" pattern="^.{2,}$" title="姓名不少于两位" class="layui-input">
+            <p style="font-size: 8px;color: red;font-weight: bold">(注意*:自巡考任务当日0点起算)</p>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">签到地理半径</label>
+        <div class="layui-input-block">
+            <input name="radius" name="radius" value='{$db.radius}米' required="required"  class="layui-input">
+        </div>
+    </div>
+
+
+
+    <div class="layui-form-item text-center">
+        <button style="background-color:#4c8ced;" class="layui-btn" type='submit'>保存数据</button>
+        <span class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</span>
+    </div>
+</form>
+<style>
+    label{
+        width: 160px!important;
+        text-align:justify;
+        text-align-last:justify;
+    }
+    .layui-input-block{
+        margin-left: 160px;
+    }
+</style>
+
+
+
+
